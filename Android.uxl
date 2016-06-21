@@ -1,0 +1,8 @@
+<Package>
+  <Extensions Backend="CPlusPlus" Condition="Android">
+      <Require AndroidManifest.Permission="android.permission.CAMERA" />
+      <CopyFile Name="libs/nurugo-sdk.jar" TargetName="@(Java.LibsDirectory)/nurugo-sdk.jar" />
+      <CopyFile Name="libs/virdi-sdk.jar" TargetName="@(Java.LibsDirectory)/virdi-sdk.jar" />
+      <CopyFile Name="libs/armeabi-v7a/libvirdiSdk.so" TargetName="@(Java.LibsDirectory)/armeabi-v7a/libvirdiSdk.so" />
+  </Extensions>
+</Package>
