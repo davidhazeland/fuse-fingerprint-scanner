@@ -1,2 +1,7 @@
 <App>
+  <FingerprintScanner ux:Global="FingerprintScanner" />
+  <JavaScript>
+		var FingerprintScanner = require('FingerprintScanner');
+		var Observable = require('FuseJS/Observable');
+	</JavaScript>
 </App>

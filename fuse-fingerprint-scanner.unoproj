@@ -5,7 +5,9 @@
   	"FuseJS"
   ],
   "Includes": [
-    "*"
+    "*.uno",
+    "*.ux",
+    "*.uxl"
   ],
   "Excludes": [
     "node_modules"
