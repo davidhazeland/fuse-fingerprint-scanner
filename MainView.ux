@@ -3,5 +3,13 @@
   <JavaScript>
 		var FingerprintScanner = require('FingerprintScanner');
 		var Observable = require('FuseJS/Observable');
+
+    FingerprintScanner.scan()
+    .then(data => {
+      console.log('ok');
+    })
+    .catch(err => {
+      console.log('ko');
+    });
 	</JavaScript>
 </App>
