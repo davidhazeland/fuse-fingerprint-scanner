@@ -54,6 +54,7 @@ public class FingerprintScanner : NativeModule
   "com.virditech.nurugo.NurugoBSP",
 	"com.virditech.nurugo.NurugoBSP.InfoData",
   "com.virditech.nurugo.NurugoBSP.MatchingTemplateData",
+  "com.virditech.nurugo.NurugoBSP.NURUGO_ERROR",
 	"android.hardware.Camera",
 	"android.hardware.Camera.PreviewCallback",
   "android.graphics.SurfaceTexture",
@@ -82,18 +83,17 @@ public class FingerprintScannerImpl
     PreviewCallback callback = new PreviewCallback() {
         @Override
         public void onPreviewFrame(byte[] data, Camera cam) {
-          Log.d("PreviewCallback: ", "Process");
           if (!@{IsCapture}) {
             NurugoBSP sdk = (NurugoBSP)@{GetSDKInstance():Call()};
 
             byte[] outRaw = sdk.extractYuvToRaw(data);
             int ret = sdk.getErrorCode();
 
-            if (ret == 0) {
+            if (ret == NURUGO_ERROR.NONE) {
               byte[] outTemplate = sdk.extractRawToTemplate(outRaw);
               ret = sdk.getErrorCode();
 
-              if (ret == 0) {
+              if (ret == NURUGO_ERROR.NONE) {
                 String base64 = Base64.encodeToString(outTemplate, Base64.DEFAULT);
                 @{Done(string):Call(base64)};
               }
@@ -109,7 +109,6 @@ public class FingerprintScannerImpl
             @{IsCapture:Set(false)};
             cam.setPreviewCallback(null);
           }
-          cam.addCallbackBuffer(data);
         }
     };
     @{_previewCallback:Set(callback)};
@@ -128,6 +127,13 @@ public class FingerprintScannerImpl
 
     sdk.initCameraParam(camera);
 
+    SurfaceTexture surfaceTexture = new SurfaceTexture(0);
+    try {
+      camera.setPreviewTexture(surfaceTexture);
+    } catch (IOException t) {
+
+    }
+
     camera.startPreview();
   @}
 
@@ -143,13 +149,6 @@ public class FingerprintScannerImpl
   @{
     Camera camera = (Camera)@{GetCameraInstance():Call()};
     PreviewCallback callback = (PreviewCallback) @{_previewCallback:Get()};
-
-    SurfaceTexture surfaceTexture = new SurfaceTexture(0);
-    try {
-      camera.setPreviewTexture(surfaceTexture);
-    } catch (IOException t) {
-
-    }
 
     camera.setPreviewCallback(callback);
   @}
