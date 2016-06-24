@@ -89,6 +89,9 @@ public class FingerprintScannerImpl
             byte[] outRaw = sdk.extractYuvToRaw(data);
             int ret = sdk.getErrorCode();
 
+            @{IsCapture:Set(false)};
+            @{Stop():Call()};
+
             if (ret == NURUGO_ERROR.NONE) {
               byte[] outTemplate = sdk.extractRawToTemplate(outRaw);
               ret = sdk.getErrorCode();
@@ -100,15 +103,13 @@ public class FingerprintScannerImpl
               else {
                 Log.d("Extract Template Error", String.valueOf(ret));
                 @{Error():Call()};
+                @{Start():Call()};
               }
             } else {
               Log.d("Extract Raw Error", String.valueOf(ret));
               @{Error():Call()};
+              @{Start():Call()};
             }
-
-            @{IsCapture:Set(false)};
-            @{Stop():Call()};
-            @{Start():Call()};
           }
         }
     };
