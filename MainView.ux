@@ -3,13 +3,54 @@
   <JavaScript>
 		var FingerprintScanner = require('FingerprintScanner');
 		var Observable = require('FuseJS/Observable');
+    var Storage = require("FuseJS/Storage");
 
-    FingerprintScanner.scan()
-    .then(data => {
-      console.log('ok');
-    })
-    .catch(err => {
-      console.log('ko');
-    });
+    var src;
+    var dist;
+
+    function handleScanClicked() {
+      FingerprintScanner.scan()
+      .then(result => {
+        console.log('ok');
+        src = result.data;
+      })
+      .catch(err => {
+        console.log('ko');
+      });
+    }
+
+    function handleMatchClicked() {
+      FingerprintScanner.scan()
+      .then(result => {
+        dist = result.data;
+        const isMatch = FingerprintScanner.match(src, dist);
+        console.log(isMatch);
+      })
+      .catch(err => {
+        console.log('ko');
+      });
+    }
+
+    function handleStartClicked() {
+      FingerprintScanner.start();
+    }
+
+    function handleStopClicked() {
+      FingerprintScanner.stop();
+    }
+
+    module.exports = {
+      handleScanClicked: handleScanClicked,
+      handleMatchClicked: handleMatchClicked,
+      handleStartClicked: handleStartClicked,
+      handleStopClicked: handleStopClicked
+    }
 	</JavaScript>
+
+  <StackPanel Padding="0,50,0,0">
+    <Basic.Button Text="Start" Clicked="{handleStartClicked}" />
+    <Basic.Button Text="Stop" Clicked="{handleStopClicked}" />
+    <Basic.Button Text="Scan" Clicked="{handleScanClicked}" />
+    <Basic.Button Text="Match" Clicked="{handleMatchClicked}" />
+  </StackPanel>
 </App>
