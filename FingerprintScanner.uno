@@ -99,20 +99,23 @@ public class FingerprintScannerImpl
               }
               else {
                 Log.d("Extract Template Error", String.valueOf(ret));
-                @{Cancelled():Call()};
+                @{Error():Call()};
               }
             } else {
               Log.d("Extract Raw Error", String.valueOf(ret));
-              @{Cancelled():Call()};
+              @{Error():Call()};
             }
 
             @{IsCapture:Set(false)};
-            cam.setPreviewCallback(null);
+            @{Stop():Call()};
+            @{Start():Call()};
           }
         }
     };
     @{_previewCallback:Set(callback)};
   @}
+
+  /* start */
 
   public static void Start()
   {
@@ -136,6 +139,8 @@ public class FingerprintScannerImpl
 
     camera.startPreview();
   @}
+
+  /* scan */
 
   public static Future<string> Scan()
   {
@@ -201,9 +206,9 @@ public class FingerprintScannerImpl
     @{_camera:Set(null)};
 	@}
 
-  static void Cancelled ()
+  static void Error ()
   {
-		FutureData.Reject(new Exception("Cancelled"));
+		FutureData.Reject(new Exception("Error!"));
 	}
 
 	static void Done (string data)
