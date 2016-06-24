@@ -98,11 +98,11 @@ public class FingerprintScannerImpl
                 @{Done(string):Call(base64)};
               }
               else {
-                Log.d("Template error", String.valueOf(ret));
+                Log.d("Extract Template Error", String.valueOf(ret));
                 @{Cancelled():Call()};
               }
             } else {
-              Log.d("Raw error", String.valueOf(ret));
+              Log.d("Extract Raw Error", String.valueOf(ret));
               @{Cancelled():Call()};
             }
 
@@ -158,12 +158,11 @@ public class FingerprintScannerImpl
   public static bool Match(object[] args) {
     string src = args[0] as string;
     string dist = args[1] as string;
-    MatchImpl(src, dist);
-    return true;
+    return MatchImpl(src, dist);
   }
 
   [Foreign(Language.Java)]
-  static extern(Android) void MatchImpl(string src, string dst)
+  static extern(Android) bool MatchImpl(string src, string dst)
   @{
     NurugoBSP sdk = (NurugoBSP)@{GetSDKInstance():Call()};
 
@@ -175,8 +174,7 @@ public class FingerprintScannerImpl
     matchingTemplateData.setInTemplateDst(templateDst);
 
     int ret = sdk.matchTemplate(matchingTemplateData);
-    Log.i("Match", String.valueOf(ret));
-    // return ret;
+    return ret == NURUGO_ERROR.NONE;
   @}
 
   /* stop */
@@ -257,9 +255,10 @@ public class FingerprintScannerImpl
     debug_log "Not support!";
   }
 
-  static extern(!Android) void MatchImpl(string src, string dst)
+  static extern(!Android) bool MatchImpl(string src, string dst)
   {
     debug_log "Not support!";
+    return false;
   }
 
   static extern(!Android) void StopImpl()
