@@ -1,0 +1,12 @@
+{
+  "RootNamespace":"FingerprintScanner",
+  "Packages": [
+  	"Fuse",
+  	"FuseJS"
+  ],
+  "Includes": [
+    "FingerprintScanner.uno",
+    "Android.uxl",
+    "libs"
+  ]
+}
