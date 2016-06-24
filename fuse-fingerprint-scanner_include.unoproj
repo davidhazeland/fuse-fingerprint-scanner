@@ -7,6 +7,6 @@
   "Includes": [
     "FingerprintScanner.uno",
     "Android.uxl",
-    "libs"
+    "libs/*"
   ]
 }
