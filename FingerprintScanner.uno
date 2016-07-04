@@ -14,6 +14,7 @@ public class FingerprintScanner : NativeModule
     AddMember(new NativeFunction("stop", (NativeCallback)Stop));
     AddMember(new NativePromise<string, Fuse.Scripting.Object>("scan", Scan, ScanConverter));
     AddMember(new NativeFunction("match", (NativeCallback)Match));
+    AddMember(new NativeFunction("isStart", (NativeCallback)IsStart));
 
     FingerprintScannerImpl.Initialize();
   }
@@ -46,6 +47,11 @@ public class FingerprintScanner : NativeModule
   {
     return FingerprintScannerImpl.Match(args);
   }
+
+  static object IsStart(Context context, object[] args)
+  {
+    return FingerprintScannerImpl.IsStart();
+  }
 }
 
 
@@ -70,6 +76,7 @@ public class FingerprintScannerImpl
 
   static Promise<string> FutureData {get; set;}
 
+  static bool _IsStart = false;
   static bool IsCapture = false;
 
   public static void Initialize()
@@ -131,7 +138,7 @@ public class FingerprintScannerImpl
 
     sdk.initCameraParam(camera);
 
-    SurfaceTexture surfaceTexture = new SurfaceTexture(0);
+    SurfaceTexture surfaceTexture = new SurfaceTexture(10);
     try {
       camera.setPreviewTexture(surfaceTexture);
     } catch (IOException t) {
@@ -139,6 +146,18 @@ public class FingerprintScannerImpl
     }
 
     camera.startPreview();
+    @{_IsStart:Set(true)};
+  @}
+
+  public static bool IsStart()
+  {
+    return IsStartImpl();
+  }
+
+  [Foreign(Language.Java)]
+  static extern(Android) bool IsStartImpl()
+  @{
+    return @{_IsStart:Get()};
   @}
 
   /* scan */
@@ -193,6 +212,7 @@ public class FingerprintScannerImpl
   static extern(Android) void StopImpl()
   @{
     @{ReleaseCamera():Call()};
+    @{_IsStart:Set(false)};
   @}
 
   /* member */
@@ -270,5 +290,11 @@ public class FingerprintScannerImpl
   static extern(!Android) void StopImpl()
   {
     debug_log "Not support!";
+  }
+
+  static extern(!Android) bool IsStartImpl()
+  {
+    debug_log "Not support!";
+    return false;
   }
 }
