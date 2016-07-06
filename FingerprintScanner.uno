@@ -12,6 +12,7 @@ public class FingerprintScanner : NativeModule
   {
     AddMember(new NativeFunction("start", (NativeCallback)Start));
     AddMember(new NativeFunction("stop", (NativeCallback)Stop));
+    AddMember(new NativeFunction("restart", (NativeCallback)Restart));
     AddMember(new NativePromise<string, Fuse.Scripting.Object>("scan", Scan, ScanConverter));
     AddMember(new NativeFunction("match", (NativeCallback)Match));
     AddMember(new NativeFunction("isStart", (NativeCallback)IsStart));
@@ -28,6 +29,13 @@ public class FingerprintScanner : NativeModule
   static object Stop(Context context, object[] args)
   {
     FingerprintScannerImpl.Stop();
+    return null;
+  }
+
+  static object Restart(Context context, object[] args)
+  {
+    FingerprintScannerImpl.Stop();
+    FingerprintScannerImpl.Start();
     return null;
   }
 
