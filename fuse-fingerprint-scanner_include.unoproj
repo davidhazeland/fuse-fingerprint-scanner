@@ -6,6 +6,8 @@
   ],
   "Includes": [
     "FingerprintScanner.uno",
+    "FingerprintScannerImpl.Android.uno",
+    "FingerprintScannerImpl.uno",
     "Android.uxl",
     "libs/*"
   ]
