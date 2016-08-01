@@ -73,7 +73,7 @@ public extern(Android) class FingerprintScannerImpl
     @{_previewCallback:Set(callback)};
 
     NurugoBSP sdk = (NurugoBSP)@{GetSDKInstance():Call()};
-    sdk.setMatchScore(3000);
+    sdk.setMatchScore(2000);
   @}
 
   /* start */
